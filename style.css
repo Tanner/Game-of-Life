@@ -16,4 +16,18 @@ body, html {
 	margin-top: -80px;
 	
 	box-shadow: 0 0 20px 10px #333;
+	
+	width: 240px;
+	height: 160px;
+}
+
+#wrapper p {
+	margin-top: 77.5px;
+
+	font-family: "Helvetica", sans-serif;
+	text-align: center;
+	
+	color: #888;
+	
+	line-height: 5px;
 }
