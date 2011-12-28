@@ -36,6 +36,7 @@ var selection = Selection.FREE;
 var timer;
 var cells;
 var cursorPosition = [PIXEL_ROWS / 2, PIXEL_COLS / 2];
+var repaint;
 
 function init() {
 	cells = new Array(PIXEL_ROWS);
@@ -46,7 +47,10 @@ function init() {
 			cells[i][j] = new Cell(DEAD, DEAD);
 		}
 	}
-
+	
+	repaint = true;
+	
+	timer = window.setInterval(update, DELAY);
 	update();
 }
 
@@ -55,43 +59,47 @@ function update() {
 	if (canvas.getContext) {
 		var context = canvas.getContext("2d");
 		
-		if (currentMode == Mode.TITLE) {
-			var titleImage = new Image();
-			titleImage.onload = function() {
-				context.drawImage(titleImage, 0, 0);
-			};
-			titleImage.src = 'images/title.png';
-			
-			var newCell = new Image();
-			newCell.onload = function() {
-				context.drawImage(newCell, 71, 86 + selection * 20);
-			};
-			newCell.src = 'images/new_cell.png';
-		}
-		
 		if (currentMode == Mode.RUN) {
 			updateCells();
-			
+			repaint = true;
+		}
+		
+		if (repaint) {
 			render(context);
+			repaint = false;
 		}
 	}
 }
 
 function render(context) {
-	context.fillStyle = "rgb(0, 0, 0)";  
-	context.fillRect(0, 0, COLS, ROWS); 
-	
-	for (var row = 0; row < PIXEL_ROWS; row++) {
-		for (var column = 0; column < PIXEL_COLS; column++) {
-			var cell = cells[row][column];
-			if (!(cell.currentStatus == DEAD && cell.nextStatus == DEAD)) {
-				drawCell(context, cell, row, column);
+	if (currentMode == Mode.TITLE) {
+		var titleImage = new Image();
+		titleImage.onload = function() {
+			context.drawImage(titleImage, 0, 0);
+		};
+		titleImage.src = 'images/title.png';
+		
+		var newCell = new Image();
+		newCell.onload = function() {
+			context.drawImage(newCell, 71, 86 + selection * 20);
+		};
+		newCell.src = 'images/new_cell.png';
+	} else {
+		context.fillStyle = "rgb(0, 0, 0)";  
+		context.fillRect(0, 0, COLS, ROWS); 
+		
+		for (var row = 0; row < PIXEL_ROWS; row++) {
+			for (var column = 0; column < PIXEL_COLS; column++) {
+				var cell = cells[row][column];
+				if (!(cell.currentStatus == DEAD && cell.nextStatus == DEAD)) {
+					drawCell(context, cell, row, column);
+				}
 			}
 		}
-	}
-	
-	if (currentMode == Mode.STOP) {
-		drawCursor(context, cursorPosition[0], cursorPosition[1]);
+		
+		if (currentMode == Mode.STOP) {
+			drawCursor(context, cursorPosition[0], cursorPosition[1]);
+		}
 	}
 }
 
@@ -210,11 +218,11 @@ key('down', function() {
 	if (currentMode == Mode.TITLE) {
 		if (selection != Selection.TWO) {
 			selection++;
+			repaint = true;
 		}
-	
-		update();
 	} else if (currentMode == Mode.STOP && cursorPosition[0] < PIXEL_ROWS - 1) {
 		cursorPosition[0]++;
+		repaint = true;
 	}
 });
 
@@ -222,23 +230,25 @@ key('up', function() {
 	if (currentMode == Mode.TITLE) {
 		if (selection != Selection.FREE) {
 			selection--;
+			repaint = true;
 		}
-	
-		update();
 	} else if (currentMode == Mode.STOP && cursorPosition[0] > 0) {
 		cursorPosition[0]--;
+		repaint = true;
 	}
 });
 
 key('left', function() {
 	if (currentMode == Mode.STOP && cursorPosition[0] > 0) {
 		cursorPosition[1]--;
+		repaint = true;
 	}
 });
 
 key('right', function() {
 	if (currentMode == Mode.STOP && cursorPosition[0] < PIXEL_COLS - 1) {
 		cursorPosition[1]++;
+		repaint = true;
 	}
 });
 
@@ -273,18 +283,13 @@ key('enter', function() {
 		
 		currentMode = Mode.RUN;
 		currentDisplayMode = DisplayMode.NORMAL;
-		timer = window.setInterval(update, DELAY);
-		update();
+		repaint = true;		
 	} else if (currentMode == Mode.STOP) {
 		var cell = cells[cursorPosition[0]][cursorPosition[1]];
 		cell.currentStatus = !cell.currentStatus;
 		cell.nextStatus = !cell.nextStatus;
 		
-		var canvas = document.getElementById("gameboy");  
-		if (canvas.getContext) {
-			var context = canvas.getContext("2d");
-			render(context);
-		}
+		repaint = true;
 	}
 });
 
@@ -292,8 +297,7 @@ key('esc', function() {
 	selection = Selection.FREE;
 	currentMode = Mode.TITLE;
 	
-	clearInterval(timer);
-	update();
+	repaint = true;
 });
 
 key('m', function() {
@@ -308,6 +312,8 @@ key('m', function() {
 			currentMode = Mode.STEP;
 			break;
 	}
+	
+	repaint = true;
 });
 
 key('d', function() {
@@ -317,35 +323,20 @@ key('d', function() {
 		currentDisplayMode = DisplayMode.NORMAL;
 	}
 	
-	var canvas = document.getElementById("gameboy");  
-	if (canvas.getContext) {
-		var context = canvas.getContext("2d");
-		render(context);
-	}
+	
+	repaint = true;
 });
 
 key('s', function() {
 	if (currentMode == Mode.STEP) {
-		var canvas = document.getElementById("gameboy");  
-		if (canvas.getContext) {
-			var context = canvas.getContext("2d");
-			
-			updateCells();
-			
-			render(context);
-		}
+		updateCells();
+		repaint = true;
 	}
 });
 
 key('e', function() {
 	if (currentMode == Mode.STOP) {
-		var canvas = document.getElementById("gameboy");  
-		if (canvas.getContext) {
-			var context = canvas.getContext("2d");
-			
-			clearAllCells();
-			
-			render(context);
-		}
+		clearAllCells();
+		repaint = true;
 	}
 });
