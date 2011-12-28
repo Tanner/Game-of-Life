@@ -225,8 +225,7 @@ key('up', function() {
 	}
 });
 
-key('z', function() {
-	// A Button
+key('enter', function() {
 	if (currentMode == Mode.TITLE) {
 		clearAllCells();
 		cursorPosition[0] = PIXEL_ROWS / 2;
