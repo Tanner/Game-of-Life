@@ -1,3 +1,11 @@
+const ROWS = 160;
+const COLS = 240;
+
+const PIXEL_SIZE = 8;
+
+const PIXEL_ROWS = ROWS / PIXEL_SIZE;
+const PIXEL_COLS = COLS / PIXEL_SIZE;
+
 Mode = {
 	TITLE : 0,
 	STEP : 1,
@@ -14,7 +22,18 @@ Selection = {
 var currentMode = Mode.TITLE;
 var selection = Selection.FREE;
 
+var cells;
+
 function init() {
+	cells = new Array(PIXEL_ROWS);
+	for (var i = 0; i < cells.length; i++) {
+		cells[i] = new Array(PIXEL_COLS);
+		
+		for (var j = 0; j < cells[i].length; j++) {
+			cells[i][j] = new Cell(false, false);
+		}
+	}
+
 	update();
 }
 
@@ -39,6 +58,20 @@ function update(context) {
 	}
 }
 
+function clearAllCells() {
+	for (var row = 0; row < cells.length; row++) {
+		for (var col = 0; col < cells[row].length; col++) {
+			cells[row][col].currentStatus = false;
+			cells[row][col].nextStatus = false;
+		}
+	}
+}
+
+function Cell(currentStatus, nextStatus) {
+	this.currentStatus = currentStatus;
+	this.nextStatus = nextStatus;
+}
+
 key('down', function() {
 	if (currentMode == Mode.TITLE) {
 		if (selection != Selection.TWO) {
@@ -56,5 +89,12 @@ key('up', function() {
 		}
 	
 		update();
+	}
+});
+
+key('z', function() {
+	// A Button
+	if (currentMode == Mode.TITLE) {
+		clearAllCells();
 	}
 });
