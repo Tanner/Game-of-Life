@@ -268,3 +268,44 @@ key('esc', function() {
 	clearInterval(timer);
 	update();
 });
+
+key('m', function() {
+	switch (currentMode) {
+		case Mode.STEP:
+			currentMode = Mode.RUN;
+			break;
+		case Mode.RUN:
+			currentMode = Mode.STOP;
+			break;
+		case Mode.STOP:
+			currentMode = Mode.STEP;
+			break;
+	}
+});
+
+key('d', function() {
+	if (currentDisplayMode == DisplayMode.NORMAL) {
+		currentDisplayMode = DisplayMode.NEXT;
+	} else if (currentDisplayMode == DisplayMode.NEXT) {
+		currentDisplayMode = DisplayMode.NORMAL;
+	}
+	
+	var canvas = document.getElementById("gameboy");  
+	if (canvas.getContext) {
+		var context = canvas.getContext("2d");
+		render(context);
+	}
+});
+
+key('s', function() {
+	if (currentMode == Mode.STEP) {
+		var canvas = document.getElementById("gameboy");  
+		if (canvas.getContext) {
+			var context = canvas.getContext("2d");
+			
+			updateCells();
+			
+			render(context);
+		}
+	}
+});
