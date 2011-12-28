@@ -90,11 +90,9 @@ function render(context) {
 		}
 	}
 	
-	/*
-if (currentMode == STOP) {
-		drawCursor(cursorPosition[0], cursorPosition[1], 1);
+	if (currentMode == Mode.STOP) {
+		drawCursor(context, cursorPosition[0], cursorPosition[1]);
 	}
-*/
 }
 
 function updateCells() {
@@ -193,6 +191,13 @@ function drawCell(cell, row, column) {
     } else if (currentDisplayMode == DisplayMode.NORMAL && cell.currentStatus) {
     	cell.src = 'images/cell.png';
 	}
+}
+
+function drawCursor(context, row, column) {
+    row *= PIXEL_SIZE;
+    column *= PIXEL_SIZE;
+    
+    context.drawRect(row, column, PIXEL_SIZE, PIXEL_SIZE);
 }
 
 function Cell(currentStatus, nextStatus) {
