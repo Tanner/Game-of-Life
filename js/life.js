@@ -85,7 +85,7 @@ function render(context) {
 		for (var column = 0; column < PIXEL_COLS; column++) {
 			var cell = cells[row][column];
 			if (!(cell.currentStatus == DEAD && cell.nextStatus == DEAD)) {
-				drawCell(cell, row, column);
+				drawCell(context, cell, row, column);
 			}
 		}
 	}
@@ -174,22 +174,22 @@ function clearAllCells() {
 	}
 }
 
-function drawCell(cell, row, column) {
-	var cell = new Image();
-	cell.onload = function() {
-		context.drawImage(cell, column * PIXEL_SIZE, row * PIXEL_SIZE);
+function drawCell(context, cell, row, column) {
+	var cellImage = new Image();
+	cellImage.onload = function() {
+		context.drawImage(cellImage, column * PIXEL_SIZE, row * PIXEL_SIZE);
 	};
 
     if (currentDisplayMode == DisplayMode.NEXT) {
         if (cell.currentStatus && cell.nextStatus) {
-        	cell.src = 'images/cell.png';
+        	cellImage.src = 'images/cell.png';
         } else if (cell.currentStatus && !cell.nextStatus) {
-        	cell.src = 'images/dying_cell.png';
+        	cellImage.src = 'images/dying_cell.png';
         } else if (!cell.currentStatus && cell.nextStatus) {
-        	cell.src = 'images/new_cell.png';
+        	cellImage.src = 'images/new_cell.png';
         }
     } else if (currentDisplayMode == DisplayMode.NORMAL && cell.currentStatus) {
-    	cell.src = 'images/cell.png';
+    	cellImage.src = 'images/cell.png';
 	}
 }
 
