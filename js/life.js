@@ -260,3 +260,11 @@ key('enter', function() {
 		update();
 	}
 });
+
+key('esc', function() {
+	selection = Selection.FREE;
+	currentMode = Mode.TITLE;
+	
+	clearInterval(timer);
+	update();
+});
