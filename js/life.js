@@ -312,6 +312,7 @@ key('m', function() {
 	switch (currentMode) {
 		case Mode.STEP:
 			currentMode = Mode.RUN;
+			stepTimer = window.setInterval(step, DELAY);
 			break;
 		case Mode.RUN:
 			currentMode = Mode.STOP;
