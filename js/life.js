@@ -6,6 +6,8 @@ const PIXEL_SIZE = 8;
 const PIXEL_ROWS = ROWS / PIXEL_SIZE;
 const PIXEL_COLS = COLS / PIXEL_SIZE;
 
+const DELAY = 250;
+
 Mode = {
 	TITLE : 0,
 	STEP : 1,
@@ -22,6 +24,7 @@ Selection = {
 var currentMode = Mode.TITLE;
 var selection = Selection.FREE;
 
+var timer;
 var cells;
 var cursorPosition = [PIXEL_ROWS / 2, PIXEL_COLS / 2];
 
@@ -101,5 +104,6 @@ key('z', function() {
 		cursorPosition[1] = PIXEL_COLS / 2;
 		
 		currentMode = Mode.RUN;
+		timer = window.setInterval(update, DELAY);
 	}
 });
