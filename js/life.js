@@ -37,7 +37,7 @@ function init() {
 		cells[i] = new Array(PIXEL_COLS);
 		
 		for (var j = 0; j < cells[i].length; j++) {
-			cells[i][j] = new Cell(false, false);
+			cells[i][j] = new Cell(DEAD, DEAD);
 		}
 	}
 
@@ -148,8 +148,8 @@ function getCellAtPosition(row, column) {
 function clearAllCells() {
 	for (var row = 0; row < cells.length; row++) {
 		for (var col = 0; col < cells[row].length; col++) {
-			cells[row][col].currentStatus = false;
-			cells[row][col].nextStatus = false;
+			cells[row][col].currentStatus = DEAD;
+			cells[row][col].nextStatus = DEAD;
 		}
 	}
 }
