@@ -18,6 +18,11 @@ Mode = {
 	RUN : 3
 }
 
+DisplayMode = {
+	NORMAL : 0,
+	NEXT : 1
+}
+
 Selection = {
 	FREE : 0,
 	ONE: 1,
@@ -25,6 +30,7 @@ Selection = {
 }
 
 var currentMode = Mode.TITLE;
+var currentDisplayMode = Mode.NORMAL;
 var selection = Selection.FREE;
 
 var timer;
@@ -72,7 +78,23 @@ function update() {
 }
 
 function render(context) {
-
+	context.fillStyle = "rgb(0, 0, 0)";  
+	context.fillRect(0, 0, COLS, ROWS); 
+	
+	for (var row = 0; row < PIXEL_ROWS; row++) {
+		for (var column = 0; column < PIXEL_COLS; column++) {
+			var cell = cells[row][column];
+			if (!(cell.currentStatus == DEAD && cell.nextStatus == DEAD)) {
+				drawCell(cell, row, column);
+			}
+		}
+	}
+	
+	/*
+if (currentMode == STOP) {
+		drawCursor(cursorPosition[0], cursorPosition[1], 1);
+	}
+*/
 }
 
 function updateCells() {
@@ -154,6 +176,25 @@ function clearAllCells() {
 	}
 }
 
+function drawCell(cell, row, column) {
+	var cell = new Image();
+	cell.onload = function() {
+		context.drawImage(cell, column * PIXEL_SIZE, row * PIXEL_SIZE);
+	};
+
+    if (currentDisplayMode == DisplayMode.NEXT) {
+        if (cell.currentStatus && cell.nextStatus) {
+        	cell.src = 'images/cell.png';
+        } else if (cell.currentStatus && !cell.nextStatus) {
+        	cell.src = 'images/dying_cell.png';
+        } else if (!cell.currentStatus && cell.nextStatus) {
+        	cell.src = 'images/new_cell.png';
+        }
+    } else if (currentDisplayMode == DisplayMode.NORMAL && cell.currentStatus) {
+    	cell.src = 'images/cell.png';
+	}
+}
+
 function Cell(currentStatus, nextStatus) {
 	this.currentStatus = currentStatus;
 	this.nextStatus = nextStatus;
@@ -187,6 +228,7 @@ key('z', function() {
 		cursorPosition[1] = PIXEL_COLS / 2;
 		
 		currentMode = Mode.RUN;
+		currentDisplayMode = DisplayMode.NORMAL;
 		timer = window.setInterval(update, DELAY);
 	}
 });
