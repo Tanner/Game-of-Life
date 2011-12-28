@@ -241,7 +241,7 @@ key('z', function() {
 				cells[2][6] = new Cell(DEAD, ALIVE);
 		
 				break;
-			case Selection.ONE:
+			case Selection.TWO:
 				cells[4][5] = new Cell(DEAD, ALIVE);
 				cells[6][5] = new Cell(DEAD, ALIVE);
 				cells[7][6] = new Cell(DEAD, ALIVE);
