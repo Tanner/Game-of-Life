@@ -9,7 +9,7 @@ const PIXEL_SIZE = 8;
 const PIXEL_ROWS = ROWS / PIXEL_SIZE;
 const PIXEL_COLS = COLS / PIXEL_SIZE;
 
-const DELAY = 250;
+const FPS = 20;
 
 Mode = {
 	TITLE : 0,
@@ -50,7 +50,7 @@ function init() {
 	
 	repaint = true;
 	
-	timer = window.setInterval(update, DELAY);
+	timer = window.setInterval(update, 1000 / FPS);
 	update();
 }
 
