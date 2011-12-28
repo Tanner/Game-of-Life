@@ -257,5 +257,6 @@ key('enter', function() {
 		currentMode = Mode.RUN;
 		currentDisplayMode = DisplayMode.NORMAL;
 		timer = window.setInterval(update, DELAY);
+		update();
 	}
 });
