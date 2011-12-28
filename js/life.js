@@ -23,6 +23,7 @@ var currentMode = Mode.TITLE;
 var selection = Selection.FREE;
 
 var cells;
+var cursorPosition = [PIXEL_ROWS / 2, PIXEL_COLS / 2];
 
 function init() {
 	cells = new Array(PIXEL_ROWS);
@@ -96,5 +97,9 @@ key('z', function() {
 	// A Button
 	if (currentMode == Mode.TITLE) {
 		clearAllCells();
+		cursorPosition[0] = PIXEL_ROWS / 2;
+		cursorPosition[1] = PIXEL_COLS / 2;
+		
+		currentMode = Mode.RUN;
 	}
 });
