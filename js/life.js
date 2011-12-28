@@ -309,3 +309,16 @@ key('s', function() {
 		}
 	}
 });
+
+key('e', function() {
+	if (currentMode == Mode.STOP) {
+		var canvas = document.getElementById("gameboy");  
+		if (canvas.getContext) {
+			var context = canvas.getContext("2d");
+			
+			clearAllCells();
+			
+			render(context);
+		}
+	}
+});
