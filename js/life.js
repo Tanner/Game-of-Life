@@ -8,22 +8,21 @@ Mode = {
 var currentMode = Mode.TITLE;
 
 function init() {
+	update();
+}
+
+function update(context) {
 	var canvas = document.getElementById("gameboy");  
 	if (canvas.getContext) {
 		var context = canvas.getContext("2d");
 		
-		update(context);
-	} else {
-		
+		if (currentMode == Mode.TITLE) {
+			var titleImage = new Image();
+			titleImage.onload = function() {
+				context.drawImage(titleImage, 0, 0);
+			};
+			titleImage.src = 'images/title.png';
+		}
 	}
 }
 
-function update(context) {
-	if (currentMode == Mode.TITLE) {
-		var titleImage = new Image();
-		titleImage.onload = function() {
-			context.drawImage(titleImage, 0, 0);
-		};
-		titleImage.src = 'images/title.png';
-	}
-}
