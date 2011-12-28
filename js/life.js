@@ -197,6 +197,7 @@ function drawCursor(context, row, column) {
     row *= PIXEL_SIZE;
     column *= PIXEL_SIZE;
     
+    context.strokeStyle = 'rgb(255, 255, 255)';
     context.drawRect(row, column, PIXEL_SIZE, PIXEL_SIZE);
 }
 
@@ -212,6 +213,8 @@ key('down', function() {
 		}
 	
 		update();
+	} else if (currentMode == Mode.STOP && cursorPosition[0] < PIXEL_ROWS - 1) {
+		cursorPosition[0]++;
 	}
 });
 
@@ -222,6 +225,20 @@ key('up', function() {
 		}
 	
 		update();
+	} else if (currentMode == Mode.STOP && cursorPosition[0] > 0) {
+		cursorPosition[0]--;
+	}
+});
+
+key('left', function() {
+	if (currentMode == Mode.STOP && cursorPosition[0] > 0) {
+		cursorPosition[1]--;
+	}
+});
+
+key('right', function() {
+	if (currentMode == Mode.STOP && cursorPosition[0] < PIXEL_COLS - 1) {
+		cursorPosition[1]++;
 	}
 });
 
@@ -258,6 +275,16 @@ key('enter', function() {
 		currentDisplayMode = DisplayMode.NORMAL;
 		timer = window.setInterval(update, DELAY);
 		update();
+	} else if (currentMode == Mode.STOP) {
+		var cell = cells[cursorPosition[0]][cursorPosition[1]];
+		cell.currentStatus = !cell.currentStatus;
+		cell.nextStatus = !cell.nextStatus;
+		
+		var canvas = document.getElementById("gameboy");  
+		if (canvas.getContext) {
+			var context = canvas.getContext("2d");
+			render(context);
+		}
 	}
 });
 
