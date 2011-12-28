@@ -10,6 +10,7 @@ const PIXEL_ROWS = ROWS / PIXEL_SIZE;
 const PIXEL_COLS = COLS / PIXEL_SIZE;
 
 const FPS = 20;
+const DELAY = 250;
 
 Mode = {
 	TITLE : 0,
@@ -33,7 +34,9 @@ var currentMode = Mode.TITLE;
 var currentDisplayMode = Mode.NORMAL;
 var selection = Selection.FREE;
 
-var timer;
+var renderTimer;
+var stepTimer;
+
 var cells;
 var cursorPosition = [PIXEL_ROWS / 2, PIXEL_COLS / 2];
 var repaint;
@@ -50,7 +53,7 @@ function init() {
 	
 	repaint = true;
 	
-	timer = window.setInterval(update, 1000 / FPS);
+	renderTimer = window.setInterval(update, 1000 / FPS);
 	update();
 }
 
@@ -59,16 +62,16 @@ function update() {
 	if (canvas.getContext) {
 		var context = canvas.getContext("2d");
 		
-		if (currentMode == Mode.RUN) {
-			updateCells();
-			repaint = true;
-		}
-		
 		if (repaint) {
 			render(context);
 			repaint = false;
 		}
 	}
+}
+
+function step() {
+	updateCells();
+	repaint = true;
 }
 
 function render(context) {
@@ -283,7 +286,10 @@ key('enter', function() {
 		
 		currentMode = Mode.RUN;
 		currentDisplayMode = DisplayMode.NORMAL;
-		repaint = true;		
+		
+		repaint = true;
+		
+		stepTimer = window.setInterval(step, DELAY);
 	} else if (currentMode == Mode.STOP) {
 		var cell = cells[cursorPosition[0]][cursorPosition[1]];
 		cell.currentStatus = !cell.currentStatus;
@@ -297,6 +303,8 @@ key('esc', function() {
 	selection = Selection.FREE;
 	currentMode = Mode.TITLE;
 	
+	window.clearInterval(stepTimer);
+	
 	repaint = true;
 });
 
@@ -307,6 +315,7 @@ key('m', function() {
 			break;
 		case Mode.RUN:
 			currentMode = Mode.STOP;
+			window.clearInterval(stepTimer);
 			break;
 		case Mode.STOP:
 			currentMode = Mode.STEP;
@@ -329,8 +338,7 @@ key('d', function() {
 
 key('s', function() {
 	if (currentMode == Mode.STEP) {
-		updateCells();
-		repaint = true;
+		step();
 	}
 });
 
