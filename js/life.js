@@ -232,6 +232,29 @@ key('z', function() {
 		cursorPosition[0] = PIXEL_ROWS / 2;
 		cursorPosition[1] = PIXEL_COLS / 2;
 		
+		switch (selection) {
+			case Selection.ONE:
+				cells[4][5] = new Cell(DEAD, ALIVE);
+				cells[4][6] = new Cell(DEAD, ALIVE);
+				cells[4][7] = new Cell(DEAD, ALIVE);
+				cells[3][7] = new Cell(DEAD, ALIVE);
+				cells[2][6] = new Cell(DEAD, ALIVE);
+		
+				break;
+			case Selection.ONE:
+				cells[4][5] = new Cell(DEAD, ALIVE);
+				cells[6][5] = new Cell(DEAD, ALIVE);
+				cells[7][6] = new Cell(DEAD, ALIVE);
+				cells[7][7] = new Cell(DEAD, ALIVE);
+				cells[7][8] = new Cell(DEAD, ALIVE);
+				cells[7][9] = new Cell(DEAD, ALIVE);
+				cells[6][9] = new Cell(DEAD, ALIVE);
+				cells[5][9] = new Cell(DEAD, ALIVE);
+				cells[4][8] = new Cell(DEAD, ALIVE);
+				
+				break;
+		}
+		
 		currentMode = Mode.RUN;
 		currentDisplayMode = DisplayMode.NORMAL;
 		timer = window.setInterval(update, DELAY);
