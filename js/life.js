@@ -41,7 +41,7 @@ function init() {
 	update();
 }
 
-function update(context) {
+function update() {
 	var canvas = document.getElementById("gameboy");  
 	if (canvas.getContext) {
 		var context = canvas.getContext("2d");
