@@ -1,6 +1,9 @@
 const ROWS = 160;
 const COLS = 240;
 
+const ALIVE = true;
+const DEAD = false;
+
 const PIXEL_SIZE = 8;
 
 const PIXEL_ROWS = ROWS / PIXEL_SIZE;
@@ -59,7 +62,87 @@ function update() {
 			};
 			newCell.src = 'images/new_cell.png';
 		}
+		
+		if (currentMode == Mode.RUN) {
+			updateCells();
+			
+			render(context);
+		}
 	}
+}
+
+function render(context) {
+
+}
+
+function updateCells() {
+	for (var row = 0; row < PIXEL_ROWS; row++) {
+		for (var column = 0; column < PIXEL_COLS; column++) {
+			cells[row][column].currentStatus = cells[row][column].nextStatus;
+		}
+	}
+
+	for (var row = 0; row < PIXEL_ROWS; row++) {
+		for (var column = 0; column < PIXEL_COLS; column++) {
+			var numberOfNeighbors = getNeighborCount(row, column);
+			
+			if (cells[row][column].currentStatus == ALIVE) {
+				if (numberOfNeighbors < 2 || numberOfNeighbors > 3) {
+					cells[row][column].nextStatus = DEAD;
+				}
+			} else {
+				if (numberOfNeighbors == 3) {
+					cells[row][column].nextStatus = ALIVE;
+				}
+			}
+		}
+	}
+}
+
+function getNeighborCount(row, column) {
+    var count = 0;
+
+    // Above
+    count += getCellAtPosition(row - 1, column).currentStatus ? 1 : 0;
+
+    // Below
+    count += getCellAtPosition(row + 1, column).currentStatus ? 1 : 0;
+
+    // Left
+    count += getCellAtPosition(row, column - 1).currentStatus ? 1 : 0;
+
+    // Right
+    count += getCellAtPosition(row, column + 1).currentStatus ? 1 : 0;
+
+    // Top Left
+    count += getCellAtPosition(row - 1, column - 1).currentStatus ? 1 : 0;
+
+    // Top Right
+    count += getCellAtPosition(row - 1, column + 1).currentStatus ? 1 : 0;
+
+    // Bottom Right
+    count += getCellAtPosition(row + 1, column + 1).currentStatus ? 1 : 0;
+
+    // Bottom Left
+    count += getCellAtPosition(row + 1, column - 1).currentStatus ? 1 : 0;
+
+    return count;
+}
+
+function getCellAtPosition(row, column) {
+    if (row < 0) {
+        row = PIXEL_ROWS - 1;
+    } else if (row >= PIXEL_ROWS) {
+        row = 0;
+    }
+
+    if (column < 0) {
+        column = PIXEL_COLS - 1;
+    } else if (column >= PIXEL_COLS) {
+        column = 0;
+    }
+
+    return cells[row][column];
 }
 
 function clearAllCells() {
