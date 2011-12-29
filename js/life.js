@@ -88,8 +88,7 @@ function render(context) {
 		};
 		newCell.src = 'images/new_cell.png';
 	} else {
-		context.fillStyle = "rgb(0, 0, 0)";  
-		context.fillRect(0, 0, COLS, ROWS); 
+		context.clearRect(0, 0, COLS, ROWS);
 		
 		for (var row = 0; row < PIXEL_ROWS; row++) {
 			for (var column = 0; column < PIXEL_COLS; column++) {
