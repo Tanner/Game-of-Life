@@ -239,14 +239,14 @@ key('up', function() {
 });
 
 key('left', function() {
-	if (currentMode == Mode.STOP && cursorPosition[0] > 0) {
+	if (currentMode == Mode.STOP && cursorPosition[1] > 0) {
 		cursorPosition[1]--;
 		repaint = true;
 	}
 });
 
 key('right', function() {
-	if (currentMode == Mode.STOP && cursorPosition[0] < PIXEL_COLS - 1) {
+	if (currentMode == Mode.STOP && cursorPosition[1] < PIXEL_COLS - 1) {
 		cursorPosition[1]++;
 		repaint = true;
 	}
