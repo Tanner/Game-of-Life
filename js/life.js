@@ -204,12 +204,9 @@ function drawCell(context, cell, row, column) {
 }
 
 function drawCursor(context, row, column) {
-    row *= PIXEL_SIZE;
-    column *= PIXEL_SIZE;
-    
     context.strokeStyle = 'rgb(255, 255, 255)';
     context.lineWidth = 2;
-    context.strokeRect(row, column, PIXEL_SIZE, PIXEL_SIZE);
+    context.strokeRect(row * PIXEL_SIZE + 1, column * PIXEL_SIZE + 1, PIXEL_SIZE - 2, PIXEL_SIZE - 2);
 }
 
 function Cell(currentStatus, nextStatus) {
