@@ -208,6 +208,7 @@ function drawCursor(context, row, column) {
     column *= PIXEL_SIZE;
     
     context.strokeStyle = 'rgb(255, 255, 255)';
+    context.lineWidth = 2;
     context.strokeRect(row, column, PIXEL_SIZE, PIXEL_SIZE);
 }
 
