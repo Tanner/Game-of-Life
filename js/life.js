@@ -100,7 +100,7 @@ function render(context) {
 		}
 		
 		if (currentMode == Mode.STOP) {
-			drawCursor(context, cursorPosition[0], cursorPosition[1]);
+			drawCursor(context, cursorPosition[1], cursorPosition[0]);
 		}
 	}
 }
@@ -208,7 +208,7 @@ function drawCursor(context, row, column) {
     column *= PIXEL_SIZE;
     
     context.strokeStyle = 'rgb(255, 255, 255)';
-    context.drawRect(row, column, PIXEL_SIZE, PIXEL_SIZE);
+    context.strokeRect(row, column, PIXEL_SIZE, PIXEL_SIZE);
 }
 
 function Cell(currentStatus, nextStatus) {
