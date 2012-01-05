@@ -232,6 +232,14 @@ function changeSize() {
 		$("#gameboy").height(ROWS);
 		$("#scaleButton").val("2x");
 	}
+	
+	$("#wrapper").css("width", COLS * scale);
+	$("#wrapper").css("height", ROWS * scale);
+	
+	$("#wrapper").css("margin-left", -(COLS * scale) / 2);
+	$("#wrapper").css("margin-top", -(ROWS * scale) / 2);
+	
+	$("#instructions").css("margin-top", (COLS * scale) / 2);
 }
 
 function Cell(currentStatus, nextStatus) {
