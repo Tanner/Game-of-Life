@@ -30,9 +30,15 @@ Selection = {
 	TWO: 2
 }
 
+Scale = {
+	STANDARD : 1,
+	DOUBLE : 2
+}
+
 var currentMode = Mode.TITLE;
 var currentDisplayMode = Mode.NORMAL;
 var selection = Selection.FREE;
+var scale = Scale.STANDARD;
 
 var renderTimer;
 var stepTimer;
@@ -50,6 +56,11 @@ function init() {
 			cells[i][j] = new Cell(DEAD, DEAD);
 		}
 	}
+	
+	// Enable size button to adjust size of canvas
+	$("#scaleButton").click(function() {
+		changeSize();
+	});
 	
 	repaint = true;
 	
@@ -207,6 +218,20 @@ function drawCursor(context, row, column) {
     context.strokeStyle = 'rgb(255, 255, 255)';
     context.lineWidth = 2;
     context.strokeRect(row * PIXEL_SIZE + 1, column * PIXEL_SIZE + 1, PIXEL_SIZE - 2, PIXEL_SIZE - 2);
+}
+
+function changeSize() {
+	if (scale == Scale.STANDARD) {
+		scale = Scale.DOUBLE;
+		$("#gameboy").width(COLS * 2);
+		$("#gameboy").height(ROWS * 2);
+		$("#scaleButton").val("1x");
+	} else if (scale == Scale.DOUBLE) {
+		scale = Scale.STANDARD;
+		$("#gameboy").width(COLS);
+		$("#gameboy").height(ROWS);
+		$("#scaleButton").val("2x");
+	}
 }
 
 function Cell(currentStatus, nextStatus) {
